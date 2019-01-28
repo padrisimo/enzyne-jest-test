@@ -38,6 +38,26 @@ describe('<App /> shallow rendering', () => {
     input.simulate('change', {currentTarget: {value: 'Tyler'}})
     expect(wrapper.find('h2').text()).toBe('Tyler')
   })
+  it('calls componentDidMount, updates p tag text', () => {
+    jest.spyOn(App.prototype, 'componentDidMount')
+    const wrapper = shallow(<App />)
+    expect(App.prototype.componentDidMount.mock.calls.length).toBe(1)
+    expect(wrapper.find('.lifeCycle').text()).toBe('componentDidMount')
+  })
+  it('setProps calls componentWillReceiveProps', () => {
+    jest.spyOn(App.prototype, 'componentWillReceiveProps')
+    const wrapper = shallow(<App />)
+    wrapper.setProps({ hide: true })
+    expect(App.prototype.componentWillReceiveProps.mock.calls.length).toBe(1)
+    expect(wrapper.find('.lifeCycle').text()).toBe('componentWillReceiveProps')
+  })
+  it('handleStrings function returns correctly', () => {
+    const wrapper = shallow(<App />)
+    const trueReturn = wrapper.instance().handleStrings('Hello World')
+    const falseReturn = wrapper.instance().handleStrings('')
+    expect(trueReturn).toBe(true)
+    expect(falseReturn).toBe(false)
+  })
 })
 
 describe('<App /> mount rendering', () => {
